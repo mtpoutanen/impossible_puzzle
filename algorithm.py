@@ -20,25 +20,53 @@ def print_puzzle(pieces):
         piece_on_top = row > 0
 
         if piece_on_left:
-            print row, column
-            fits_left = (piece.left + puzzle[row][column-1]) == 0
+            fits_left = (piece.left + puzzle[row][column-1].right) == 0
 
         if piece_on_top:
-            fits_top = (piece.top + puzzle[row - 1][column]) == 0
+            fits_top = (piece.top + puzzle[row - 1][column].bottom) == 0
 
         return fits_left and fits_top
 
-    def fill_puzzle(pieces, puzzle, piece_to_insert):
-        remaining_pieces = deepcopy(pieces)
-        row, column = find_next_empty(puzzle)
-        for index, piece in enumerate(remaining_pieces):
-            if not piece_to_insert:
-                piece_to_insert = piece
-            del remaining_pieces[index]
-            is_a_fit = piece_fits(piece_to_insert, puzzle, row, column)
-            print is_a_fit
+    def find_next_empty(puzzle):
+        for row in xrange(0, 4):
+            if not puzzle[row]:
+                return row, 0
 
-    fill_puzzle(pieces, puzzle, None)
+            rowlen = len(puzzle[row])
+            if rowlen == 4:
+                continue
+            else:
+                return row, len(puzzle[row])
+
+    def fill_puzzle(pieces, puzzle, piece_index):
+
+        if not pieces:
+            return puzzle
+
+        remaining_pieces = deepcopy(pieces)
+        piece_to_insert = remaining_pieces[piece_index]
+        filled_puzzle = deepcopy(puzzle)
+        row, column = find_next_empty(filled_puzzle)
+        is_a_fit = False
+        while not is_a_fit and not piece_to_insert.circle_complete:
+            is_a_fit = piece_fits(piece_to_insert, filled_puzzle, row, column)
+            if not is_a_fit:
+                piece_to_insert.turn()
+            else:
+                filled_puzzle[row].append(piece_to_insert)
+                print filled_puzzle
+                remaining_pieces.remove(piece_to_insert)
+                if not fill_puzzle(remaining_pieces, filled_puzzle, 0):
+                    is_a_fit = False
+
+        if piece_to_insert.circle_complete:
+            # last piece, didn't fit
+            if piece_index == len(remaining_pieces) - 1:
+                return False
+            else:
+                return fill_puzzle(remaining_pieces, filled_puzzle, piece_index + 1)
+
+    fill_puzzle(pieces, puzzle, 0)
 
 print_puzzle(PIECES)
 
