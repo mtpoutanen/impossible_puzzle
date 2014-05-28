@@ -56,8 +56,13 @@ def print_puzzle(pieces):
                 filled_puzzle[row].append(piece_to_insert)
                 print filled_puzzle
                 remaining_pieces.remove(piece_to_insert)
-                if not fill_puzzle(remaining_pieces, filled_puzzle, 0):
-                    is_a_fit = False
+                is_a_fit = False
+                ret = fill_puzzle(remaining_pieces, filled_puzzle, 0)
+                if not ret:
+                    filled_puzzle[row].remove(piece_to_insert)
+                    remaining_pieces.insert(piece_index, piece_to_insert)
+                else:
+                    return ret
 
         if piece_to_insert.circle_complete:
             # last piece, didn't fit
@@ -66,7 +71,7 @@ def print_puzzle(pieces):
             else:
                 return fill_puzzle(remaining_pieces, filled_puzzle, piece_index + 1)
 
-    fill_puzzle(pieces, puzzle, 0)
+    print fill_puzzle(pieces, puzzle, 0)
 
 print_puzzle(PIECES)
 

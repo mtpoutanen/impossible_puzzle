@@ -10,17 +10,17 @@ IN_ARROW_HOLE = -IN_ARROW
 
 class Piece(object):
 
-    def __init__(self, top, right, left, bottom):
+    def __init__(self, top, right, bottom, left):
         super(Piece, self).__init__()
         self.top = top
         self.right = right
-        self.left = left
         self.bottom = bottom
+        self.left = left
         self.turn_count = 0
         self.circle_complete = False
 
     def __repr__(self):
-        repr_str = 't%sr%sb%sl%s' % (
+        repr_str = '|t%s, r%s, b%s, l%s| ' % (
             self.top, self.right, self.bottom, self.left,
         )
         return repr_str
@@ -44,10 +44,10 @@ PIECES = [
     Piece(OCTAGON, CROSS, IN_ARROW_HOLE, OCTAGON_HOLE),
     Piece(IN_ARROW, OUT_ARROW, OUT_ARROW_HOLE, OCTAGON_HOLE),
     Piece(OUT_ARROW, OCTAGON, OCTAGON_HOLE, OUT_ARROW_HOLE),
-    Piece(OCTAGON, IN_ARROW_HOLE, OCTAGON_HOLE, CROSS_HOLE),
+    Piece(OCTAGON, IN_ARROW, OCTAGON_HOLE, CROSS_HOLE),
 
     Piece(OCTAGON, CROSS, OUT_ARROW_HOLE, OUT_ARROW_HOLE),
-    Piece(IN_ARROW_HOLE, CROSS, OUT_ARROW_HOLE, IN_ARROW_HOLE),
+    Piece(IN_ARROW, CROSS, OUT_ARROW_HOLE, IN_ARROW_HOLE),
     Piece(IN_ARROW, IN_ARROW, OUT_ARROW_HOLE, CROSS_HOLE),
     Piece(IN_ARROW, IN_ARROW, OCTAGON_HOLE, CROSS_HOLE),
 
