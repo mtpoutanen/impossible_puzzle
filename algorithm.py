@@ -48,21 +48,24 @@ def print_puzzle(pieces):
         filled_puzzle = deepcopy(puzzle)
         row, column = find_next_empty(filled_puzzle)
         is_a_fit = False
+
         while not is_a_fit and not piece_to_insert.circle_complete:
             is_a_fit = piece_fits(piece_to_insert, filled_puzzle, row, column)
+            # print 'test'
             if not is_a_fit:
                 piece_to_insert.turn()
             else:
+                # print piece_to_insert
                 filled_puzzle[row].append(piece_to_insert)
-                print filled_puzzle
                 remaining_pieces.remove(piece_to_insert)
-                is_a_fit = False
                 ret = fill_puzzle(remaining_pieces, filled_puzzle, 0)
                 if not ret:
-                    filled_puzzle[row].remove(piece_to_insert)
+                    filled_puzzle[row].pop()
                     remaining_pieces.insert(piece_index, piece_to_insert)
                 else:
                     return ret
+
+        # somehow shit still falls through here even turn is not complete
 
         if piece_to_insert.circle_complete:
             # last piece, didn't fit

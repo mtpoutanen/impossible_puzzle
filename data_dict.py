@@ -20,7 +20,7 @@ class Piece(object):
         self.circle_complete = False
 
     def __repr__(self):
-        repr_str = '|t%s, r%s, b%s, l%s| ' % (
+        repr_str = '|t%s, r%s, b%s, l%s|\n' % (
             self.top, self.right, self.bottom, self.left,
         )
         return repr_str
@@ -36,6 +36,7 @@ class Piece(object):
         self.right = top
 
         self.turn_count += 1
+        # print self.turn_count
         if self.turn_count >= 4:
             self.circle_complete = True
 
