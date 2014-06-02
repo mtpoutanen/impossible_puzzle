@@ -1,8 +1,6 @@
 from copy import deepcopy
-
 from data_dict import PIECES
 
-no_of_pieces = len(PIECES)
 
 def print_puzzle(pieces):
     # the empty lists represent different rows
@@ -43,36 +41,34 @@ def print_puzzle(pieces):
         if not pieces:
             return puzzle
 
-        remaining_pieces = deepcopy(pieces)
-        piece_to_insert = remaining_pieces[piece_index]
-        filled_puzzle = deepcopy(puzzle)
-        row, column = find_next_empty(filled_puzzle)
+        piece_to_insert = pieces[piece_index]
+        row, column = find_next_empty(puzzle)
         is_a_fit = False
 
         while not is_a_fit and not piece_to_insert.circle_complete:
-            is_a_fit = piece_fits(piece_to_insert, filled_puzzle, row, column)
-            # print 'test'
-            if not is_a_fit:
-                piece_to_insert.turn()
-            else:
-                # print piece_to_insert
-                filled_puzzle[row].append(piece_to_insert)
-                remaining_pieces.remove(piece_to_insert)
+            is_a_fit = piece_fits(piece_to_insert, puzzle, row, column)
+            if is_a_fit:
+                remaining_pieces = deepcopy(pieces)
+                filled_puzzle = deepcopy(puzzle)
+                filled_puzzle[row].append(deepcopy(piece_to_insert))
+                del remaining_pieces[piece_index]
                 ret = fill_puzzle(remaining_pieces, filled_puzzle, 0)
+
                 if not ret:
-                    filled_puzzle[row].pop()
-                    remaining_pieces.insert(piece_index, piece_to_insert)
+                    is_a_fit = False
+                    piece_to_insert.circle_complete = False
                 else:
                     return ret
 
-        # somehow shit still falls through here even turn is not complete
+            piece_to_insert.turn()
 
-        if piece_to_insert.circle_complete:
-            # last piece, didn't fit
-            if piece_index == len(remaining_pieces) - 1:
-                return False
-            else:
-                return fill_puzzle(remaining_pieces, filled_puzzle, piece_index + 1)
+        piece_to_insert.circle_complete = False
+
+        if piece_index == len(pieces) - 1:
+            return False
+        else:
+            return fill_puzzle(pieces, puzzle, piece_index + 1)
+        raise Exception('should never get here')
 
     print fill_puzzle(pieces, puzzle, 0)
 

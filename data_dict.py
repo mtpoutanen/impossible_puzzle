@@ -7,6 +7,17 @@ OCTAGON_HOLE = -OCTAGON
 OUT_ARROW_HOLE = -OUT_ARROW
 IN_ARROW_HOLE = -IN_ARROW
 
+names = {
+    CROSS: 'cross',
+    OCTAGON: 'octagon',
+    OUT_ARROW: 'out_arrow',
+    IN_ARROW: 'in_arrow',
+    CROSS_HOLE: 'cross_hole',
+    OCTAGON_HOLE: 'octagon_hole',
+    OUT_ARROW_HOLE: 'out_arrow_hole',
+    IN_ARROW_HOLE: 'in_arrow_hole',
+}
+
 
 class Piece(object):
 
@@ -20,8 +31,11 @@ class Piece(object):
         self.circle_complete = False
 
     def __repr__(self):
-        repr_str = '|t%s, r%s, b%s, l%s|\n' % (
-            self.top, self.right, self.bottom, self.left,
+        repr_str = '|top: %s, right: %s, bottom: %s, left: %s|\n' % (
+            names[self.top],
+            names[self.right],
+            names[self.bottom],
+            names[self.left],
         )
         return repr_str
 
@@ -39,6 +53,7 @@ class Piece(object):
         # print self.turn_count
         if self.turn_count >= 4:
             self.circle_complete = True
+            self.turn_count = 0
 
 
 PIECES = [
