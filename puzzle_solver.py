@@ -70,7 +70,9 @@ def print_puzzle(pieces):
             return fill_puzzle(pieces, puzzle, piece_index + 1)
         raise Exception('should never get here')
 
-    print fill_puzzle(pieces, puzzle, 0)
+    solved_puzzle = fill_puzzle(pieces, puzzle, 0)
+    for index, row in enumerate(solved_puzzle):
+        print "row %s: %s" % (index + 1, row)
 
 print_puzzle(PIECES)
 
