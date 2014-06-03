@@ -1,5 +1,5 @@
 from copy import deepcopy
-from data_dict import PIECES
+from data import PIECES
 
 
 def print_puzzle(pieces):
@@ -45,29 +45,30 @@ def print_puzzle(pieces):
         row, column = find_next_empty(puzzle)
         is_a_fit = False
 
-        while not is_a_fit and not piece_to_insert.circle_complete:
+        # Try fitting the piece in to the next slot in each of the possible positions.
+        while not piece_to_insert.circle_complete:
             is_a_fit = piece_fits(piece_to_insert, puzzle, row, column)
             if is_a_fit:
                 remaining_pieces = deepcopy(pieces)
                 filled_puzzle = deepcopy(puzzle)
                 filled_puzzle[row].append(deepcopy(piece_to_insert))
                 del remaining_pieces[piece_index]
-                ret = fill_puzzle(remaining_pieces, filled_puzzle, 0)
 
-                if not ret:
-                    is_a_fit = False
-                    piece_to_insert.circle_complete = False
-                else:
+                ret = fill_puzzle(remaining_pieces, filled_puzzle, 0)
+                if ret:
                     return ret
 
             piece_to_insert.turn()
 
         piece_to_insert.circle_complete = False
 
+        # Last piece, couldn't fit, return false
         if piece_index == len(pieces) - 1:
             return False
+        # else try the next piece
         else:
             return fill_puzzle(pieces, puzzle, piece_index + 1)
+
         raise Exception('should never get here')
 
     solved_puzzle = fill_puzzle(pieces, puzzle, 0)
